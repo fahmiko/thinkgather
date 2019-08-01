@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "251864056235",
+    "firebase_url": "https://thinkgather.firebaseio.com",
+    "project_id": "thinkgather",
+    "storage_bucket": "thinkgather.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251864056235:android:67097e986ab67860",
+        "android_client_info": {
+          "package_name": "com.dev.thinkgather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251864056235-kcvt6f45278eg6kss8m5i0mhjklv1ggm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANkRSWq8qsWTKFe16DmhLVWEGJD2vpph4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251864056235-kcvt6f45278eg6kss8m5i0mhjklv1ggm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

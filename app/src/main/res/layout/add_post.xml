@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<android.support.constraint.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/popup_user_image"
+        android:layout_width="54dp"
+        android:layout_height="62dp"
+        android:background="#ffffff"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/popup_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/popup_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <EditText
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/popup_edittext_style"
+        android:id="@+id/popup_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="Title"
+        app:layout_constraintEnd_toStartOf="@+id/popup_user_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/popup_img"
+        android:layout_width="0dp"
+        android:layout_height="225dp"
+        android:layout_marginTop="12dp"
+        android:background="#2d2d2d"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_title"
+        tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+
+    <ImageView
+        android:id="@+id/popup_add"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/circle_bg"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="@+id/popup_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_img"
+        app:srcCompat="@drawable/ic_create_black_24dp" />
+
+    <EditText
+        android:id="@+id/popup_description"
+        android:layout_width="411dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/popup_edittext_style"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_img" />
+
+    <EditText
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:hint="HAKI"
+        android:background="@drawable/popup_edittext_style"
+        android:id="@+id/popup_haki"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textAutoCorrect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_description" />
+
+    <EditText
+        android:id="@+id/popup_tanggal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:background="@drawable/popup_edittext_style"
+        android:editable="false"
+        android:clickable="true"
+        android:ems="10"
+        android:hint="Tanggal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_haki" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/popup_buku"
+        app:cornerRadius="20dp"
+        android:layout_width="115dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/popup_edittext_style"
+        android:clickable="true"
+        android:ems="10"
+        android:hint="Upload File"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.104"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/popup_haki"
+        app:layout_goneMarginTop="12dp" />
+
+    <TextView
+        android:id="@+id/text_upload"
+        android:layout_width="194dp"
+        android:layout_height="27dp"
+        android:layout_marginBottom="12dp"
+        android:text=""
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/popup_buku"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.843"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/popup_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circle_bg"
+        android:padding="4dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/popup_add"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/popup_add"
+        app:layout_constraintTop_toTopOf="@+id/popup_add"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.NestedScrollView>
