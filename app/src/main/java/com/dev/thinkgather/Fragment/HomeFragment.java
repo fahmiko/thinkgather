@@ -3,6 +3,7 @@ package com.dev.thinkgather.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -19,8 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.CursorAdapter;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.SimpleCursorAdapter;
 
 import com.dev.thinkgather.Activity.DetailPost;
 import com.dev.thinkgather.Activity.TambahPublikasi;
@@ -49,12 +52,16 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.recycler_content) RecyclerView recyclerContent;
     @BindView(R.id.eventsplace) RecyclerView eventsplace;
 
-    LinearLayoutManager linearLayoutManager;
-    RecyclerView.Adapter adapter;
-    RecyclerView.Adapter adapterEvent;
-    List<Publikasi> publikasiList;
-    ServicePublikasi service;
-    SearchView searchView;
+    private LinearLayoutManager linearLayoutManager;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.Adapter adapterEvent;
+    private SimpleCursorAdapter suggestionAdapter;
+    private List<Publikasi> publikasiList;
+    private ServicePublikasi service;
+    private SearchView searchView;
+    private String[] SUGGESTION;
+
+
     public static HomeFragment homeFragment;
 
     public HomeFragment() {
@@ -98,33 +105,40 @@ public class HomeFragment extends Fragment {
 
             }
         }));
+
+        final String[] from = new String[] {"Fakultas"};
+        final int[] to = new int[] {android.R.id.text1};
+        suggestionAdapter = new SimpleCursorAdapter(getActivity(),
+                android.R.layout.simple_list_item_1,
+                null, from, to, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER );
     }
 
     private void setAnimation(){
         // snapping the scroll items
         final SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
         snapHelper.attachToRecyclerView(eventsplace);
-
+        /*
         // set a timer for default item
-//        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                // Do something after 1ms = 100ms
-//                RecyclerView.ViewHolder viewHolderDefault = eventsplace.
-//                        findViewHolderForAdapterPosition(0);
-//                LinearLayout eventparentDefault = viewHolderDefault.itemView.
-//                            findViewById(R.id.eventparent);
-//
-//                eventparentDefault.animate().scaleY(1).scaleX(1).setDuration(350).
-//                        setInterpolator(new AccelerateInterpolator()).start();
-//
-//                LinearLayout eventcategoryDefault = viewHolderDefault.itemView.
-//                        findViewById(R.id.eventbadge);
-//                eventcategoryDefault.animate().alpha(1).setDuration(300).start();
-//
-//            }
-//        }, 100);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 1ms = 100ms
+                RecyclerView.ViewHolder viewHolderDefault = eventsplace.
+                        findViewHolderForAdapterPosition(0);
+                LinearLayout eventparentDefault = viewHolderDefault.itemView.
+                            findViewById(R.id.eventparent);
+
+                eventparentDefault.animate().scaleY(1).scaleX(1).setDuration(350).
+                        setInterpolator(new AccelerateInterpolator()).start();
+
+                LinearLayout eventcategoryDefault = viewHolderDefault.itemView.
+                        findViewById(R.id.eventbadge);
+                eventcategoryDefault.animate().alpha(1).setDuration(300).start();
+
+            }
+        }, 100);
+        */
 
         // add animate scroll
         eventsplace.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -183,6 +197,9 @@ public class HomeFragment extends Fragment {
                     publikasiList.clear();
                     if (response.body().getResult().size() != 0) {
                         publikasiList.addAll(response.body().getResult());
+                        for(int i = 0; i < response.body().getResult().size(); i++){
+                            SUGGESTION[i] = publikasiList.get(i).getMinat();
+                        }
                     }
                     adapterEvent.notifyDataSetChanged();
                     adapter.notifyDataSetChanged();
@@ -206,11 +223,25 @@ public class HomeFragment extends Fragment {
         searchView.setSearchableInfo(searchManager
                 .getSearchableInfo(getActivity().getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+            @Override
+            public boolean onSuggestionSelect(int position) {
+                Cursor cursor = (Cursor) suggestionAdapter.getItem(position);
+                String txt = cursor.getString(cursor.getColumnIndex("Fakultas"));
+                searchView.setQuery(txt, true);
+                return true;
+            }
+
+            @Override
+            public boolean onSuggestionClick(int position) {
+                return false;
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                String[] strings = {"politeknik negeri malang","universitas negeri malang"};
-                startActivity(new Intent(getContext(), MapsActivity.class).putExtra("location", strings));
+//                String[] strings = {"politeknik negeri malang","universitas negeri malang"};
+//                startActivity(new Intent(getContext(), MapsActivity.class).putExtra("location", strings));
                 return false;
             }
 
@@ -230,4 +261,6 @@ public class HomeFragment extends Fragment {
         }
         return false;
     }
+
+
 }

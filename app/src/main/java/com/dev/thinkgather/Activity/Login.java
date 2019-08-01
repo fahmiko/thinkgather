@@ -17,6 +17,11 @@ import com.dev.thinkgather.R;
 import com.dev.thinkgather.Service.ServiceClient;
 import com.dev.thinkgather.Service.ServiceMember;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -31,13 +36,12 @@ public class Login extends AppCompatActivity {
     @BindView(R.id.login_mail) EditText loginMail;
     @BindView(R.id.login_password) EditText loginPassword;
     @BindView(R.id.loginBtn) Button loginBtn;
-    @BindView(R.id.login_progress) ProgressBar loginProgress;
     @BindView(R.id.button_register) Button buttonRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.login_example);
         ButterKnife.bind(this);
         service = ServiceClient.getClient().create(ServiceMember.class);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
@@ -48,13 +52,24 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    @OnClick(R.id.loginBtn)
+    private String getReminingTime() {
+        Calendar now = Calendar.getInstance();
+        String time;
+        if(now.get(Calendar.AM_PM) == Calendar.AM){
+            // AM
+            time = ""+now.get(Calendar.HOUR)+":AM";
+        }else{
+            // PM
+            time = ""+now.get(Calendar.HOUR)+":PM";
+        }
+        return time;
+    }
+
+    @OnClick({R.id.loginBtn})
     public void onClick() {
-        if (loginMail.getText().toString() == "" || loginPassword.getText().toString() == "") {
+        if (loginMail.getText().toString().equals("") || loginPassword.getText().toString().equals("")) {
             Toast.makeText(this, "Email dan password tidak valid", Toast.LENGTH_SHORT).show();
         } else {
-            loginBtn.setVisibility(View.GONE);
-            buttonRegister.setVisibility(View.GONE);
             Member member = new Member(loginMail.getText().toString(), loginPassword.getText().toString(), session.getDeviceToken());
             service.loginMember(member).enqueue(new Callback<GetMember>() {
                 @Override
@@ -69,14 +84,11 @@ public class Login extends AppCompatActivity {
                             finish();
                         }
                     }
-                    loginBtn.setVisibility(View.VISIBLE);
-                    buttonRegister.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onFailure(Call<GetMember> call, Throwable t) {
-                    loginBtn.setVisibility(View.VISIBLE);
-                    buttonRegister.setVisibility(View.VISIBLE);
+
                 }
             });
         }
