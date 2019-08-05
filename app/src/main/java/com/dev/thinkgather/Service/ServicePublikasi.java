@@ -44,6 +44,16 @@ public interface ServicePublikasi {
             @Part("tanggal") RequestBody tanggal
     );
 
+    @FormUrlEncoded
+    @POST("Rest_publikasi/edit")
+    Call<GetPublikasi> editPublikasi(
+            @Field("id_publikasi") String id_publikasi,
+            @Field("judul") String judul,
+            @Field("deskripsi") String deskripsi,
+            @Field("haki") String haki
+    );
+
+
     @POST("Rest_publikasi/komentar")
     Call<PostData> tambahKomentar(
         @Body Komentar komentar

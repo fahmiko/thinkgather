@@ -40,6 +40,13 @@ public class Member {
         this.token = token;
     }
 
+    public Member(String idMember, String email, String institusi, String minatKeilmuan) {
+        this.idMember = idMember;
+        this.email = email;
+        this.institusi = institusi;
+        this.minatKeilmuan = minatKeilmuan;
+    }
+
     public Member(String idMember, String nama, String email, String institusi, String minatKeilmuan, String foto) {
         this.idMember = idMember;
         this.nama = nama;

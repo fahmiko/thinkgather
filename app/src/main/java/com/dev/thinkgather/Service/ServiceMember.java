@@ -22,8 +22,8 @@ public interface ServiceMember {
             @Header("id_member") String id_member
     );
 
-    @GET("Rest_members/institusi")
-    Call<GetMember> getInstansi();
+    @GET("Rest_members/instansi")
+    Call<GetInstansi> getInstansi();
 
     @POST("Rest_members/login")
     Call<GetMember> loginMember(
@@ -40,5 +40,10 @@ public interface ServiceMember {
     Call<GetMember> editFoto(
             @Part MultipartBody.Part file,
             @Part("id_member") RequestBody id_member
+    );
+
+    @POST("Rest_members/edit")
+    Call<GetMember> editMember(
+        @Body Member member
     );
 }

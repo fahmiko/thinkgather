@@ -25,7 +25,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="@font/mr"
-        android:text="Welcome, Sir!"
+        android:text="Publikasi saya"
         android:textColor="#FFF"
         android:textSize="25dp"
         android:textStyle="bold"

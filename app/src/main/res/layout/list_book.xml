@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:paddingBottom="@dimen/row_padding"
+        android:paddingLeft="@dimen/activity_margin"
+        android:paddingRight="@dimen/activity_margin"
+        android:paddingTop="@dimen/row_padding">
+
+        <ImageView
+            android:src="@drawable/ic_picture_as_pdf_red_48dp"
+            android:id="@+id/thumbnail"
+            android:layout_width="@dimen/thumbnail"
+            android:layout_height="@dimen/thumbnail"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/row_padding" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/thumbnail"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="@dimen/contact_name" />
+
+        <TextView
+            android:id="@+id/sub_name"
+            android:text="Sub Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:layout_toRightOf="@id/thumbnail"
+            android:textSize="@dimen/contact_number" />
+
+        <TextView
+            android:id="@+id/btn_download"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:drawableTint="@color/colorPrimary"
+            android:drawablePadding="10dp"
+            android:text="Download"
+            android:drawableRight="@drawable/ic_file_download_white_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+</ScrollView>

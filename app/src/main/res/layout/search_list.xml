@@ -3,27 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:orientation="horizontal">
+    android:layout_width="411dp"
+    android:layout_height="99dp"
+    android:layout_marginTop="8dp"
+    android:background="@color/colorLight"
+    android:layout_marginEnd="8dp"
+    android:orientation="horizontal"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView">
 
-    <ImageView
-        android:scaleType="matrix"
-        android:id="@+id/gambar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/picsmallone" />
+
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_marginLeft="10dp"
+        android:layout_margin="20dp"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/judul"
+            android:id="@+id/sr_judul"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+            android:drawableTint="@color/colorDark"
+            android:drawablePadding="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/mr"
@@ -32,9 +35,11 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tanggal"
+            android:id="@+id/sr_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
+            android:layout_marginLeft="35dp"
             android:layout_marginTop="6dp"
             android:fontFamily="@font/ml"
             android:text="Feb 22, 2018"

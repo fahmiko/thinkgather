@@ -38,6 +38,12 @@ public class Session {
         editor.apply();
     }
 
+    public void savePublikasi(String member){
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("jml_publikasi", member);
+        editor.apply();
+    }
+
     public void sessionDestroy(){
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear().apply();

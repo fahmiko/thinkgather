@@ -52,7 +52,6 @@ public class ProfileFragment extends Fragment {
     @BindView(R.id.pr_photo) CircleImageView prPhoto;
     @BindView(R.id.pr_name) TextView prName;
     @BindView(R.id.pr_publikasi) TextView prPublikasi;
-    @BindView(R.id.pr_komentar) TextView prKomentar;
     @BindView(R.id.btn_edit_email) ImageView btnEditEmail;
     @BindView(R.id.pr_email) TextView prEmail;
     @BindView(R.id.btn_edit_minat) ImageView btnEditMinat;
@@ -111,6 +110,7 @@ public class ProfileFragment extends Fragment {
                 this.session.getStringLogin("minat"),
                 this.session.getStringLogin("foto")
         );
+        prPublikasi.setText(session.getStringLogin("jml_publikasi"));
         Glide.with(getContext())
                 .load(ServiceClient.BASE_URL+"uploads/members/"+member.getFoto())
                 .into(prPhoto);
@@ -149,6 +149,8 @@ public class ProfileFragment extends Fragment {
 
         if(validasi == 0){
             Toast.makeText(v.getContext(), "Tidak ada perubahan!", Toast.LENGTH_SHORT).show();
+        }else{
+            submitData();
         }
     }
 
@@ -223,4 +225,22 @@ public class ProfileFragment extends Fragment {
         });
     }
 
+    private void submitData(){
+        Member memberSubmit = new Member(member.getIdMember(), prEmail.getText().toString(), prInstitusi.getText().toString(), prMinat.getText().toString());
+        serviceMember.editMember(memberSubmit).enqueue(new Callback<GetMember>() {
+            @Override
+            public void onResponse(Call<GetMember> call, Response<GetMember> response) {
+                if(response.body().getStatus().equals("success")){
+                    session.saveLogin(response.body().getResult().get(0));
+                    Toast.makeText(getContext(), "Data Berhasil diperbarui", Toast.LENGTH_SHORT).show();
+                    Main.main.updateDrawer();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetMember> call, Throwable t) {
+
+            }
+        });
+    }
 }

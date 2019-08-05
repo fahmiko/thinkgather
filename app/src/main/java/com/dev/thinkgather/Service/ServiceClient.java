@@ -11,9 +11,9 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceClient {
-//    public static final String BASE_URL = "http://vesma-um.com/thinkgather/";
-        public static final String BASE_URL = "http://192.168.2.20/thinkgather/";
-//    public static final String BASE_URL = "http://192.168.201.1/thinkgather/";
+    public static final String BASE_URL = "http://vesma-um.com/thinkgather/";
+//        public static final String BASE_URL = "http://192.168.2.20/thinkgather/";
+//    public static final String BASE_URL = "http://192.168.43.102/thinkgather/";
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {

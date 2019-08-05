@@ -2,24 +2,38 @@ package com.dev.thinkgather.Activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.abdeveloper.library.MultiSelectDialog;
+import com.abdeveloper.library.MultiSelectModel;
 import com.dev.thinkgather.Method.Application;
 import com.dev.thinkgather.Method.Session;
+import com.dev.thinkgather.Model.GetInstansi;
 import com.dev.thinkgather.Model.GetMember;
+import com.dev.thinkgather.Model.GetPublikasi;
+import com.dev.thinkgather.Model.Instansi;
 import com.dev.thinkgather.Model.Member;
 import com.dev.thinkgather.Model.PostData;
+import com.dev.thinkgather.Model.Publikasi;
 import com.dev.thinkgather.R;
 import com.dev.thinkgather.Service.ServiceClient;
 import com.dev.thinkgather.Service.ServiceMember;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.SearchResultListener;
+import ir.mirrajabi.searchdialog.core.Searchable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +49,9 @@ public class Register extends AppCompatActivity {
     @BindView(R.id.regBtn) Button regBtn;
     @BindView(R.id.regProgressBar) ProgressBar regProgressBar;
     @BindView(R.id.regInstansi) EditText regInstansi;
-    ServiceMember serviceMember;
+    private ServiceMember serviceMember;
+    private List<Instansi> instansiList;
+
 
 
     @Override
@@ -45,6 +61,49 @@ public class Register extends AppCompatActivity {
         ButterKnife.bind(this);
         register = this;
         serviceMember = ServiceClient.getClient().create(ServiceMember.class);
+        instansiList = new ArrayList<>();
+        loadInstansi();
+        regInstansi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSelect(v);
+            }
+        });
+    }
+
+    private void loadInstansi() {
+        serviceMember.getInstansi().enqueue(new Callback<GetInstansi>() {
+            @Override
+            public void onResponse(Call<GetInstansi> call, Response<GetInstansi> response) {
+                instansiList.addAll(response.body().getResult());
+            }
+
+            @Override
+            public void onFailure(Call<GetInstansi> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void showSelect(View view) {
+        new SimpleSearchDialogCompat<>(view.getContext(), "Cari Instansi",
+                "Pencarian", null, createData(),
+                new SearchResultListener<SampleModelInstansi>() {
+                    @Override
+                    public void onSelected(BaseSearchDialogCompat dialog, SampleModelInstansi item, int position) {
+                        regInstansi.setText(item.getTitle());
+                        dialog.dismiss();
+                    }
+                }
+        ).show();
+    }
+
+    private ArrayList<SampleModelInstansi> createData(){
+        ArrayList<SampleModelInstansi> items = new ArrayList<>();
+        for(int i = 0; i < instansiList.size(); i++){
+            items.add(new SampleModelInstansi(instansiList.get(i).getInstitusi()));
+        }
+        return items;
     }
 
     @OnClick(R.id.regBtn)
@@ -75,9 +134,21 @@ public class Register extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<PostData> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Cek koneksi Internet", Toast.LENGTH_SHORT).show();
                 regBtn.setVisibility(View.VISIBLE);
             }
         });
+    }
+}
+
+class SampleModelInstansi implements Searchable{
+    private String title;
+
+    public SampleModelInstansi(String title){
+        this.title = title;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 }
