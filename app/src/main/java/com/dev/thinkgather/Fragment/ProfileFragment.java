@@ -9,9 +9,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -126,7 +130,7 @@ public class ProfileFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.btn_edit_email, R.id.btn_edit_minat, R.id.btn_edit_institusi})
+    @OnClick({R.id.btn_edit_email, R.id.btn_edit_minat, R.id.btn_edit_institusi, R.id.pr_name})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_edit_email:
@@ -138,11 +142,15 @@ public class ProfileFragment extends Fragment {
             case R.id.btn_edit_institusi:
                 showDialogText("Institusi", prInstitusi);
                 break;
+            case R.id.pr_name:
+                showDialogText("Nama", prName);
+                break;
         }
     }
 
     private void saveData(View v) {
         int validasi = 0;
+        if(prName.getText().toString().equals(this.member.getNama())){ validasi += 1; }
         if(prEmail.getText().toString().equals(this.member.getEmail())){ validasi += 1; }
         if(prMinat.getText().toString().equals(this.member.getMinatKeilmuan())){ validasi += 1; }
         if(prInstitusi.getText().toString().equals(this.member.getInstitusi())){ validasi += 1; }
@@ -155,11 +163,15 @@ public class ProfileFragment extends Fragment {
     }
 
     private void showDialogText(String title, final TextView textView){
-        final EditText text = new EditText(getContext());
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View customText = inflater.inflate(R.layout.customtext, null);
+        final TextInputEditText text = customText.findViewById(R.id.text_input);
+        text.setHint(title);
         text.setText(textView.getText().toString());
+//        final TextInputEditText text = new TextInputEditText(getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(title).setMessage("Ubah Data");
-        builder.setView(text);
+        builder.setView(customText);
         builder.setPositiveButton("YA", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -226,7 +238,7 @@ public class ProfileFragment extends Fragment {
     }
 
     private void submitData(){
-        Member memberSubmit = new Member(member.getIdMember(), prEmail.getText().toString(), prInstitusi.getText().toString(), prMinat.getText().toString());
+        Member memberSubmit = new Member(member.getIdMember(), prName.getText().toString(), prEmail.getText().toString(), prInstitusi.getText().toString(), prMinat.getText().toString());
         serviceMember.editMember(memberSubmit).enqueue(new Callback<GetMember>() {
             @Override
             public void onResponse(Call<GetMember> call, Response<GetMember> response) {

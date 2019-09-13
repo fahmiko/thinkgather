@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -147,7 +148,9 @@ public class DetailPost extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<PostData> call, Response<PostData> response) {
                     if (response.code() == 200) {
-                        loadData();
+                        if(response.body().getStatus().equals("success")){
+                            loadData();
+                        }
                     }
                 }
 
@@ -180,8 +183,35 @@ public class DetailPost extends AppCompatActivity {
                     Toast.makeText(this, "Buku tidak ditemukan", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.dt_del:
+                deletePublikasi();
+                break;
+            case R.id.dt_add:
+                startActivity(new Intent(this, TambahPublikasi.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deletePublikasi() {
+        if(session.getStringLogin("nama").equals(publikasi.getNama())){
+            service.deletePublikasi(publikasi.getIdPublikasi()).enqueue(new Callback<PostData>() {
+                @Override
+                public void onResponse(Call<PostData> call, Response<PostData> response) {
+                    if(response.body().getStatus().equals("success")){
+                        finish();
+                        (HomeFragment.homeFragment).loadData();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PostData> call, Throwable t) {
+
+                }
+            });
+        }else{
+            Toast.makeText(this, "Anda tidak memiliki akses", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void editPublikasi() {

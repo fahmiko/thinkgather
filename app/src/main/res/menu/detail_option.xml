@@ -11,4 +11,10 @@
         android:id="@+id/dt_edit"
         android:icon="@drawable/ic_edit_white_24dp"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/dt_add"
+        android:title="Tambah Publikasi"/>
+    <item
+        android:id="@+id/dt_del"
+        android:title="Delete Publikasi"/>
 </menu>

@@ -3,6 +3,7 @@ package com.dev.thinkgather.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,11 +31,14 @@ import com.dev.thinkgather.Model.PostData;
 import com.dev.thinkgather.R;
 import com.dev.thinkgather.Service.ServiceClient;
 import com.dev.thinkgather.Service.ServicePublikasi;
+import com.nbsp.materialfilepicker.MaterialFilePicker;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +62,7 @@ public class TambahPublikasi extends AppCompatActivity {
     @BindView(R.id.popup_img) ImageView popupImg;
     @BindView(R.id.popup_add) ImageView popupAdd;
     public SimpleDialog progress;
+    String dateSave;
     File imageFile, doctFile;
     Uri selectedFiles;
     DatePickerDialog datePickerDialog;
@@ -75,6 +80,7 @@ public class TambahPublikasi extends AppCompatActivity {
 
     private void initComponents() {
         tambahPublikasi = this;
+        dateSave = "";
         service = ServiceClient.getClient().create(ServicePublikasi.class);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Tambah Publikasi");
@@ -91,13 +97,24 @@ public class TambahPublikasi extends AppCompatActivity {
         startActivityForResult(intentChoice, 1);
     }
 
+    private void launchPicker(){
+        new MaterialFilePicker()
+                .withActivity(this)
+                .withRequestCode(101)
+                .withHiddenFiles(false)
+                .withFilter(Pattern.compile(".*\\.pdf$"))
+                .withTitle("Pilih File PDF")
+                .start();
+    }
+
     private void uploadDokumen() {
-        final Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.setType("application/pdf");
-        Intent intentChoice = Intent.createChooser(
-                intent, "Pilih Dokumen untuk di upload");
-        startActivityForResult(intentChoice, 2);
+        launchPicker();
+//        final Intent intent = new Intent();
+//        intent.setType("application/pdf");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        Intent intentChoice = Intent.createChooser(
+//                intent, "Pilih Dokumen untuk di upload");
+//        startActivityForResult(intentChoice, 2);
     }
 
     private void submitData() {
@@ -113,7 +130,10 @@ public class TambahPublikasi extends AppCompatActivity {
             }
 
             try {
-                files = prepareFilePart("files", selectedFiles);
+//                files = prepareFilePart("files", selectedFiles);
+                RequestBody requestFile2 = RequestBody.create(MediaType.parse("application/pdf"), doctFile);
+                files = MultipartBody.Part.createFormData("files", doctFile.getName(),
+                        requestFile2);
             } catch (Exception e) {
                 files = null;
             }
@@ -125,13 +145,18 @@ public class TambahPublikasi extends AppCompatActivity {
             RequestBody reqHaki = MultipartBody.create(
                     MediaType.parse("multipart/form-data"), popupHaki.getText().toString());
             RequestBody reqTanggal = MultipartBody.create(
-                    MediaType.parse("multipart/form-data"), popupTanggal.getText().toString());
+                    MediaType.parse("multipart/form-data"), dateSave);
             RequestBody reqMember = MultipartBody.create(
                     MediaType.parse("multipart/form-data"), session.getStringLogin("id_member"));
             service.tambahPublikasi(body, files, reqMember, reqTitle, reqDescription, reqHaki, reqTanggal).enqueue(new Callback<PostData>() {
                 @Override
                 public void onResponse(Call<PostData> call, Response<PostData> response) {
-
+                    if(response.body().getStatus().equals("success")){
+                        finish();
+                        (HomeFragment.homeFragment).loadData();
+                    }else if(response.body().getStatus().equals("failed")){
+                        Toast.makeText(getApplicationContext(), response.body().getMessage(),Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -160,7 +185,6 @@ public class TambahPublikasi extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Uri selectedImage;
-        Uri selectedFile;
         if (resultCode == RESULT_OK && requestCode == 1) {
             if (data == null) {
                 Toast.makeText(getApplicationContext(), "Foto gagal di-load", Toast.LENGTH_LONG).show();
@@ -185,9 +209,12 @@ public class TambahPublikasi extends AppCompatActivity {
             if (data == null) {
                 Toast.makeText(getApplicationContext(), "Dokumen gagal di-load", Toast.LENGTH_LONG).show();
             }
-            selectedFile = data.getData();
             selectedFiles = data.getData();
-            String path = FilePath.getPath(this, selectedFile);
+            textUpload.setText(selectedFiles.toString());
+        }
+
+        if (requestCode == 101 && resultCode == RESULT_OK){
+            String path = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
             doctFile = new File(path);
             textUpload.setText(doctFile.getName());
         }
@@ -209,6 +236,7 @@ public class TambahPublikasi extends AppCompatActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, month, dayOfMonth);
                 popupTanggal.setText(Application.indonesiaFormatDate(simpleDateFormat.format(newDate.getTime())));
+                dateSave = simpleDateFormat.format(newDate.getTime());
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();
@@ -217,17 +245,16 @@ public class TambahPublikasi extends AppCompatActivity {
     private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
         // https://github.com/iPaulPro/aFileChooser/blob/master/aFileChooser/src/com/ipaulpro/afilechooser/utils/FileUtils.java
         // use the FileUtils to get the actual file by uri
-        File file = new File(FilePath.getPath(getApplicationContext(), fileUri));
 
         // create RequestBody instance from file
         RequestBody requestFile =
                 RequestBody.create(
-                        MediaType.parse(getContentResolver().getType(fileUri)),
-                        file
+                        MediaType.parse("application/pdf"),
+                        doctFile
                 );
 
         // MultipartBody.Part is used to send also the actual file name
-        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
+        return MultipartBody.Part.createFormData(partName, doctFile.getName(), requestFile);
     }
 
 //    public void showDialogTime(){

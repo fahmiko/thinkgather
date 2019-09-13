@@ -99,7 +99,18 @@ public class HomeFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         eventsplace.setLayoutManager(linearLayoutManager);
         recyclerContent.setLayoutManager(new LinearLayoutManager(getContext()));
+        eventsplace.addOnItemTouchListener(new RecyclerTouchListener(getContext(), eventsplace, new ClickListenner() {
+            @Override
+            public void onClick(View v, int position) {
+                Publikasi publikasi = publikasiMember.get(position);
+                startActivity(new Intent(getContext(), DetailPost.class).putExtra("Publikasi", publikasi));
+            }
 
+            @Override
+            public void onLongClick(View v, int position) {
+
+            }
+        }));
         eventsplace.setAdapter(adapterEvent);
         recyclerContent.setAdapter(adapter);
         recyclerContent.addOnItemTouchListener(new RecyclerTouchListener(getContext(), recyclerContent, new ClickListenner() {
@@ -203,6 +214,7 @@ public class HomeFragment extends Fragment {
             public void onResponse(Call<GetPublikasi> call, Response<GetPublikasi> response) {
                 if (response.code() == 200) {
                     publikasiList.clear();
+                    publikasiMember.clear();
                     if (response.body().getResult().size() != 0) {
                         publikasiList.addAll(response.body().getResult());
                         int jml_publikasi = 0;

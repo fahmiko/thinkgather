@@ -1,5 +1,6 @@
 package com.dev.thinkgather.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -66,6 +67,7 @@ public class Register extends AppCompatActivity {
         regInstansi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(instansiList.size() == 0){ loadInstansi(); }
                 showSelect(v);
             }
         });
@@ -108,7 +110,7 @@ public class Register extends AppCompatActivity {
 
     @OnClick(R.id.regBtn)
     public void onClick() {
-        regBtn.setVisibility(View.GONE);
+        regBtn.setVisibility(View.INVISIBLE);
         Member member = new Member(
                 regName.getText().toString(),
                 regMail.getText().toString(),
@@ -119,22 +121,26 @@ public class Register extends AppCompatActivity {
                 session.getDeviceToken()
         );
 
-        serviceMember.registerMember(member).enqueue(new Callback<PostData>() {
+        serviceMember.registerMember(member).enqueue(new Callback<GetMember>() {
             @Override
-            public void onResponse(Call<PostData> call, Response<PostData> response) {
-                if(response.body().getStatus().equals("success")){
-                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_SHORT);
-                    finish();
-
-                }else{
-                    Toast.makeText(getApplicationContext(),response.message(), Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<GetMember> call, Response<GetMember> response) {
+                if(response.code() == 200){
+                    if(response.body().getStatus().equals("success")){
+                        if(response.body().getResult().size() != 0){
+                            session.saveLogin(response.body().getResult().get(0));
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), Main.class));
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        regBtn.setVisibility(View.VISIBLE);
+                    }
                 }
-                regBtn.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onFailure(Call<PostData> call, Throwable t) {
-                regBtn.setVisibility(View.VISIBLE);
+            public void onFailure(Call<GetMember> call, Throwable t) {
+
             }
         });
     }

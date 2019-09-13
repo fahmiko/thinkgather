@@ -24,18 +24,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        if(remoteMessage.getNotification().getTitle().equals("Register")){
-            Register.register.finish();
-        }else{
-            try {
-                TambahPublikasi.tambahPublikasi.progress.dismiss();
-                TambahPublikasi.tambahPublikasi.finish();
-                (HomeFragment.homeFragment).loadData();
-                (DetailPost.detailPost).loadData();
-            }catch (Exception e){
+        showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        try {
+            TambahPublikasi.tambahPublikasi.progress.dismiss();
+            TambahPublikasi.tambahPublikasi.finish();
+            (HomeFragment.homeFragment).loadData();
+            DetailPost.detailPost.loadData();
+        }catch (Exception e){
 
-            }
-            showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
     }
 

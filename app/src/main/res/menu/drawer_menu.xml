@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/db" android:title="Dashboard" android:iconTint="@color/colorDark" android:icon="@drawable/ic_home_black_24dp"/>
+    <item android:id="@+id/db" android:title="Beranda" android:iconTint="@color/colorDark" android:icon="@drawable/ic_home_black_24dp"/>
     <item android:id="@+id/buku" android:title="Daftar Buku" android:icon="@drawable/ic_library_books_black_24dp"/>
-    <item android:id="@+id/akun" android:title="Profile" android:icon="@drawable/ic_person_black_24dp"/>
-    <item android:id="@+id/logout" android:title="Logout" android:icon="@drawable/ic_exit_to_app_black_24dp"/>
+    <item android:id="@+id/akun" android:title="Profil" android:icon="@drawable/ic_person_black_24dp"/>
+    <item android:id="@+id/logout" android:title="Keluar" android:icon="@drawable/ic_exit_to_app_black_24dp"/>
 </menu>

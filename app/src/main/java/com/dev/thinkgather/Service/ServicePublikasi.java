@@ -58,4 +58,9 @@ public interface ServicePublikasi {
     Call<PostData> tambahKomentar(
         @Body Komentar komentar
     );
+
+    @GET("Rest_publikasi/delete")
+    Call<PostData> deletePublikasi(
+            @Header("id_publikasi") String id_publikasi
+    );
 }

@@ -31,7 +31,7 @@ public interface ServiceMember {
     );
 
     @POST("Rest_members/register")
-    Call<PostData> registerMember(
+    Call<GetMember> registerMember(
         @Body Member member
     );
 

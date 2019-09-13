@@ -28,11 +28,14 @@
                     android:layout_height="150dp" />
                 <TextView
                     android:id="@+id/pr_name"
+                    android:clickable="true"
                     android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Wiliam Snoe"
+                    android:drawablePadding="5dp"
+                    android:drawableRight="@drawable/ic_edit_white_24dp"
                     android:textColor="#fff"
                     android:textStyle="bold"
                     android:textSize="21sp"/>
@@ -196,7 +199,7 @@
             app:menu_colorNormal="@color/colorPrimary"
             app:menu_colorPressed="@color/mateGreen"
             android:layout_gravity="right"
-            android:layout_marginTop="-80dp"
+            android:layout_marginTop="-100dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp">
             <com.github.clans.fab.FloatingActionButton

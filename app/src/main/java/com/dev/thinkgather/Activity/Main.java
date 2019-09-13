@@ -90,7 +90,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.db:
                 mDrawerLayout.closeDrawers();
                 getSupportFragmentManager().beginTransaction().replace(R.id.container, new HomeFragment()).commit();
-                getSupportActionBar().setTitle("Dashboard");
+                getSupportActionBar().setTitle("Beranda");
                 break;
             case R.id.buku:
                 mDrawerLayout.closeDrawers();
