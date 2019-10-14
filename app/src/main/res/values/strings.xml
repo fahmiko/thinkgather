@@ -6,4 +6,12 @@
     <string-array name="string_instansi">
         <item>Pilih Instansi</item>
     </string-array>
+
+    <string-array name="PublicationList">
+        <item>Artikel</item>
+        <item>Buku</item>
+        <item>HAKI</item>
+    </string-array>
+
+
 </resources>

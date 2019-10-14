@@ -55,7 +55,7 @@
         android:layout_marginStart="28dp"
         android:layout_marginTop="404dp"
         android:fontFamily="@font/mm"
-        android:text="NEW CONTENT"
+        android:text="CONTENT"
         android:textColor="#374160"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"

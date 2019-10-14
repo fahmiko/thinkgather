@@ -16,12 +16,12 @@
 
             <LinearLayout
                 android:background="@color/colorPrimary"
-                android:layout_width="match_parent"
                 android:layout_height="350dp"
+                android:layout_width="match_parent"
                 android:orientation="vertical">
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/pr_photo"
-                    android:src="@drawable/um"
+                    android:src="@drawable/avatar_profile"
                     android:layout_marginTop="35dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="150dp"
@@ -51,7 +51,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="3">
                     <LinearLayout
                         android:layout_marginHorizontal="2dp"
                         android:gravity="center"
@@ -62,11 +62,11 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Publikasi"
+                            android:text="Artikel"
                             android:textSize="20sp"
                             />
                         <TextView
-                            android:id="@+id/pr_publikasi"
+                            android:id="@+id/pr_artikel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
@@ -74,33 +74,53 @@
                             android:textSize="20sp"
                             android:paddingTop="10dp"
                             android:textColor="@color/startblue"/>
-
                     </LinearLayout>
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:gravity="center"-->
-                        <!--android:orientation="vertical">-->
-
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="Komentar"-->
-                            <!--android:textSize="20sp" />-->
-
-                        <!--<TextView-->
-                            <!--android:id="@+id/pr_komentar"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:paddingTop="10dp"-->
-                            <!--android:text="0"-->
-                            <!--android:textColor="@color/startblue"-->
-                            <!--android:textSize="20sp"-->
-                            <!--android:textStyle="bold" />-->
-
-                    <!--</LinearLayout>-->
+                    <LinearLayout
+                        android:layout_marginHorizontal="2dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Buku"
+                            android:textSize="20sp"
+                            />
+                        <TextView
+                            android:id="@+id/pr_buku"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:paddingTop="10dp"
+                            android:textColor="@color/startblue"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginHorizontal="2dp"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="HAKI"
+                            android:textSize="20sp"
+                            />
+                        <TextView
+                            android:id="@+id/pr_haki"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textStyle="bold"
+                            android:textSize="20sp"
+                            android:paddingTop="10dp"
+                            android:textColor="@color/startblue"/>
+                    </LinearLayout>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -193,33 +213,38 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-        <com.github.clans.fab.FloatingActionMenu
+        <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:menu_colorNormal="@color/colorPrimary"
-            app:menu_colorPressed="@color/mateGreen"
             android:layout_gravity="right"
-            android:layout_marginTop="-100dp"
+            android:src="@drawable/ic_save_white_24dp"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp">
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_menu_save"
-                android:layout_width="wrap_content"
-                app:fab_colorNormal="@color/mateGreen"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_save_white_24dp"
-                android:tint="@color/colorLight"
-                app:fab_size="mini"
-                app:fab_label="Simpan Perubahan" />
-            <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/fab_menu_upload"
-                android:layout_width="wrap_content"
-                app:fab_colorNormal="@color/mateGreen"
-                android:layout_height="wrap_content"
-                android:tint="@color/colorLight"
-                android:src="@drawable/ic_file_upload_black_24dp"
-                app:fab_size="mini"
-                app:fab_label="Upload Foto" />
-        </com.github.clans.fab.FloatingActionMenu>
+        </com.github.clans.fab.FloatingActionButton>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/mm"
+            android:text="KARYA SAYA"
+            android:textColor="#374160"
+            android:textSize="18sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_margin="10dp"
+            android:id="@+id/recycler_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/nodata"
+            android:textSize="20dp"
+            android:text="NO DATA"
+            android:textColor="@color/colorDark"
+            android:layout_marginBottom="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

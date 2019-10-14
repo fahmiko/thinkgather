@@ -40,7 +40,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         Publikasi event = eventList.get(i);
 
         eventViewHolder.eventtitle.setText(event.getJudul());
-        eventViewHolder.eventcategory.setText(event.getMinat());
+        eventViewHolder.eventcategory.setText(event.getHaki());
 //        eventViewHolder.eventpicture.setImageDrawable(context.getDrawable(R.drawable.um));
         if(!event.getGambar().equals("")){
             Glide.with(context.getApplicationContext())

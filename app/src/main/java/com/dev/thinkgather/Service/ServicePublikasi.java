@@ -27,6 +27,11 @@ public interface ServicePublikasi {
             @Header("id_publikasi") String id_publikasi
     );
 
+    @GET("Rest_publikasi/favorite")
+    Call<GetFavorite> getFavoriteById(
+            @Header("id_member") String id_member
+    );
+
     @GET("Rest_members/members")
     Call<GetPublikasi> getPublikasiByInstitusi(
             @Header("institusi") String institusi
@@ -53,6 +58,10 @@ public interface ServicePublikasi {
             @Field("haki") String haki
     );
 
+    @POST("Rest_publikasi/favorite")
+    Call<PostData> updateFavorite(
+            @Body Favorite favorite
+    );
 
     @POST("Rest_publikasi/komentar")
     Call<PostData> tambahKomentar(

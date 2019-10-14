@@ -15,9 +15,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +57,7 @@ public class TambahPublikasi extends AppCompatActivity {
     @BindView(R.id.popup_user_image) ImageView popupUserImage;
     @BindView(R.id.popup_title) EditText popupTitle;
     @BindView(R.id.popup_description) EditText popupDescription;
-    @BindView(R.id.popup_haki) EditText popupHaki;
+    @BindView(R.id.popup_haki) Spinner popupHaki;
     @BindView(R.id.popup_tanggal) EditText popupTanggal;
     @BindView(R.id.popup_buku) MaterialButton popupBuku;
     @BindView(R.id.text_upload) TextView textUpload;
@@ -83,9 +85,11 @@ public class TambahPublikasi extends AppCompatActivity {
         dateSave = "";
         service = ServiceClient.getClient().create(ServicePublikasi.class);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Tambah Publikasi");
+        getSupportActionBar().setTitle("Tambah Karya");
         getSupportActionBar().show();
         simpleDateFormat = new SimpleDateFormat("yyyy-M-dd", Locale.ENGLISH);
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(getApplicationContext(), R.array.PublicationList, android.R.layout.simple_spinner_dropdown_item);
+        popupHaki.setAdapter(arrayAdapter);
     }
 
     private void uploadFoto() {
@@ -143,7 +147,7 @@ public class TambahPublikasi extends AppCompatActivity {
             RequestBody reqDescription = MultipartBody.create(
                     MediaType.parse("multipart/form-data"), popupDescription.getText().toString());
             RequestBody reqHaki = MultipartBody.create(
-                    MediaType.parse("multipart/form-data"), popupHaki.getText().toString());
+                    MediaType.parse("multipart/form-data"), popupHaki.getSelectedItem().toString());
             RequestBody reqTanggal = MultipartBody.create(
                     MediaType.parse("multipart/form-data"), dateSave);
             RequestBody reqMember = MultipartBody.create(
@@ -301,7 +305,7 @@ public class TambahPublikasi extends AppCompatActivity {
     private void resetData() {
         popupTitle.setText("");
         popupTanggal.setText("");
-        popupHaki.setText("");
+        popupHaki.setSelection(0);
         popupDescription.setText("");
     }
 

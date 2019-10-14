@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,17 +29,23 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.dev.thinkgather.Activity.Home;
 import com.dev.thinkgather.Activity.Main;
+import com.dev.thinkgather.Adapter.PublikasiAdapter;
 import com.dev.thinkgather.Method.Application;
 import com.dev.thinkgather.Method.FilePath;
 import com.dev.thinkgather.Method.Session;
 import com.dev.thinkgather.Model.GetMember;
+import com.dev.thinkgather.Model.GetPublikasi;
 import com.dev.thinkgather.Model.Member;
+import com.dev.thinkgather.Model.Publikasi;
 import com.dev.thinkgather.R;
 import com.dev.thinkgather.Service.ServiceClient;
 import com.dev.thinkgather.Service.ServiceMember;
+import com.dev.thinkgather.Service.ServicePublikasi;
 import com.github.clans.fab.FloatingActionButton;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,19 +63,26 @@ public class ProfileFragment extends Fragment {
 
     @BindView(R.id.pr_photo) CircleImageView prPhoto;
     @BindView(R.id.pr_name) TextView prName;
-    @BindView(R.id.pr_publikasi) TextView prPublikasi;
+    @BindView(R.id.pr_artikel) TextView prArtikel;
+    @BindView(R.id.pr_buku) TextView prBuku;
+    @BindView(R.id.pr_haki) TextView prHaki;
     @BindView(R.id.btn_edit_email) ImageView btnEditEmail;
     @BindView(R.id.pr_email) TextView prEmail;
     @BindView(R.id.btn_edit_minat) ImageView btnEditMinat;
     @BindView(R.id.pr_minat) TextView prMinat;
     @BindView(R.id.btn_edit_institusi) ImageView btnEditInstitusi;
     @BindView(R.id.pr_institusi) TextView prInstitusi;
+    @BindView(R.id.nodata) TextView nodata;
+    @BindView(R.id.recycler_content) RecyclerView recyclerContent;
     Unbinder unbinder;
     Member member;
     Session session = Application.getSession();
     File imageFile;
     ServiceMember serviceMember;
-
+    ServicePublikasi servicePublikasi;
+    int artikel, haki, buku;
+    PublikasiAdapter publikasiAdapter;
+    List<Publikasi> publikasiList;
 
     public ProfileFragment() {
     }
@@ -78,21 +93,49 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.profile, container, false);
         unbinder = ButterKnife.bind(this, view);
         initComponents();
-        FloatingActionButton button = view.findViewById(R.id.fab_menu_save);
-        FloatingActionButton upload = view.findViewById(R.id.fab_menu_upload);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveData(v);
-            }
-        });
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                uploadFoto();
-            }
-        });
+        getDataPublikasi();
         return view;
+    }
+
+    private void getDataPublikasi() {
+        servicePublikasi.getAllPublikasi().enqueue(new Callback<GetPublikasi>() {
+            @Override
+            public void onResponse(Call<GetPublikasi> call, Response<GetPublikasi> response) {
+                publikasiList.clear();
+                if(response.body().getResult().size() != 0){
+                    for(int i = 0; i < response.body().getResult().size(); i++){
+                        if(response.body().getResult().get(i).getIdMember().equals(session.getStringLogin("id_member"))){
+                            publikasiList.add(response.body().getResult().get(i));
+                        }
+                    }
+                    publikasiAdapter.notifyDataSetChanged();
+                    nodata.setVisibility(View.GONE);
+                    updateCount(publikasiList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetPublikasi> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private void updateCount(List<Publikasi> publikasiList) {
+        artikel = 0; haki = 0; buku = 0;
+        for (int i = 0; i < publikasiList.size(); i++){
+            if(publikasiList.get(i).getHaki().equals("Artikel")){
+                artikel++;
+            }if(publikasiList.get(i).getHaki().equals("HAKI")){
+                haki++;
+            }if(publikasiList.get(i).getHaki().equals("Buku")){
+                buku++;
+            }
+        }
+        prArtikel.setText(String.valueOf(artikel));
+        prBuku.setText(String.valueOf(buku));
+        prHaki.setText(String.valueOf(haki));
     }
 
     private void uploadFoto() {
@@ -105,7 +148,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initComponents() {
+        publikasiList = new ArrayList<>();
         serviceMember = ServiceClient.getClient().create(ServiceMember.class);
+        servicePublikasi = ServiceClient.getClient().create(ServicePublikasi.class);
+        recyclerContent.setLayoutManager(new LinearLayoutManager(getContext()));
         member = new Member(
                 this.session.getStringLogin("id_member"),
                 this.session.getStringLogin("nama"),
@@ -114,14 +160,23 @@ public class ProfileFragment extends Fragment {
                 this.session.getStringLogin("minat"),
                 this.session.getStringLogin("foto")
         );
-        prPublikasi.setText(session.getStringLogin("jml_publikasi"));
-        Glide.with(getContext())
-                .load(ServiceClient.BASE_URL+"uploads/members/"+member.getFoto())
-                .into(prPhoto);
+        try {
+            if(!member.getFoto().equals("")){
+                Glide.with(getContext())
+                        .load(ServiceClient.BASE_URL+"uploads/members/"+member.getFoto())
+                        .into(prPhoto);
+            }else{
+                prPhoto.setImageResource(R.drawable.avatar_profile);
+            }
+        }catch (Exception e){
+            prPhoto.setImageResource(R.drawable.avatar_profile);
+        }
         prName.setText(member.getNama());
         prEmail.setText(member.getEmail());
         prInstitusi.setText(member.getInstitusi());
         prMinat.setText(member.getMinatKeilmuan());
+        publikasiAdapter = new PublikasiAdapter(getContext(), publikasiList, "my_collection", "profile");
+        recyclerContent.setAdapter(publikasiAdapter);
     }
 
     @Override
@@ -143,7 +198,22 @@ public class ProfileFragment extends Fragment {
                 showDialogText("Institusi", prInstitusi);
                 break;
             case R.id.pr_name:
-                showDialogText("Nama", prName);
+                CharSequence[] sequence = {"Upload Foto", "Ganti Nama"};
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Edit")
+                        .setItems(sequence, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case 0:
+                                        uploadFoto();
+                                        break;
+                                    case 1:
+                                        showDialogText("Nama", prName);
+                                        break;
+                                }
+                            }
+                        }).show();
                 break;
         }
     }

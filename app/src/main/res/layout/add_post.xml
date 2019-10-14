@@ -82,16 +82,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popup_img" />
 
-    <EditText
+    <Spinner
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
-        android:hint="HAKI"
-        android:background="@drawable/popup_edittext_style"
         android:id="@+id/popup_haki"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textAutoCorrect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popup_description" />
@@ -100,7 +96,7 @@
         android:id="@+id/popup_tanggal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/popup_edittext_style"
         android:focusable="false"
         android:clickable="true"
@@ -125,7 +121,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.104"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/popup_haki"
+        app:layout_constraintTop_toBottomOf="@+id/popup_tanggal"
         app:layout_goneMarginTop="12dp" />
 
     <TextView

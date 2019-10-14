@@ -117,7 +117,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v, int position) {
                 Publikasi publikasi = publikasiList.get(position);
-                startActivity(new Intent(getContext(), DetailPost.class).putExtra("Publikasi", publikasi));
+//                startActivity(new Intent(getContext(), DetailPost.class).putExtra("Publikasi", publikasi));
             }
 
             @Override
@@ -216,12 +216,14 @@ public class HomeFragment extends Fragment {
                     publikasiList.clear();
                     publikasiMember.clear();
                     if (response.body().getResult().size() != 0) {
-                        publikasiList.addAll(response.body().getResult());
+//                        publikasiList.addAll(response.body().getResult());
                         int jml_publikasi = 0;
                         for(int i = 0; i < response.body().getResult().size(); i++){
-                            if(publikasiList.get(i).getIdMember().equals(session.getStringLogin("id_member"))){
+                            if(response.body().getResult().get(i).getIdMember().equals(session.getStringLogin("id_member"))){
                                 jml_publikasi++;
                                 publikasiMember.add(response.body().getResult().get(i));
+                            }else{
+                                publikasiList.add(response.body().getResult().get(i));
                             }
                         }
                         session.savePublikasi(""+jml_publikasi);
@@ -300,10 +302,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void populateAdapter(String query){
-        final MatrixCursor c = new MatrixCursor(new String[]{ BaseColumns._ID , "keilmuan", "lokasi"});
+        final MatrixCursor c = new MatrixCursor(new String[]{ BaseColumns._ID , "keilmuan", "lokasi", "judul"});
         for (int i=0; i<publikasiList.size(); i++) {
-            if (publikasiList.get(i).getMinat().toLowerCase().startsWith(query.toLowerCase()))
-                c.addRow(new Object[] {i, publikasiList.get(i).getMinat(), publikasiList.get(i).getInstitusi()});
+            if (publikasiList.get(i).getMinat().toLowerCase().startsWith(query.toLowerCase()) || publikasiList.get(i).getInstitusi().toLowerCase().startsWith(query.toLowerCase()) || publikasiList.get(i).getJudul().toLowerCase().startsWith(query.toLowerCase()))
+                c.addRow(new Object[] {i, publikasiList.get(i).getMinat(), publikasiList.get(i).getInstitusi(), publikasiList.get(i).getJudul()});
         }
         cursorAdapter.changeCursor(c);
     }
@@ -311,7 +313,8 @@ public class HomeFragment extends Fragment {
     private void checkMinat(String queryText){
         List<Publikasi> filterPublikasi = new ArrayList<>();
         for(int i = 0; i < publikasiList.size(); i++){
-            if(queryText.toLowerCase().equals(publikasiList.get(i).getMinat().toLowerCase())){
+            if(queryText.toLowerCase().equals(publikasiList.get(i).getMinat().toLowerCase()) || queryText.toLowerCase().equals(publikasiList.get(i).getInstitusi().toLowerCase()) || queryText.toLowerCase().equals(publikasiList.get(i).getJudul())
+            ){
                 filterPublikasi.add(publikasiList.get(i));
             }
         }
